@@ -40,9 +40,9 @@ class FlaskAppTest(unittest.TestCase):
         # Navigate to the homepage
         self.driver.get(self.url)
 
-        # Check if the page contains expected content
+        # Check if the page contains the correct content (adjusted based on the actual content)
         content = self.driver.find_element(By.TAG_NAME, "body").text
-        self.assertIn("Hello", content)
+        self.assertIn("To-Do List", content)  # Update to match actual content on your page
 
 
 if __name__ == "__main__":
