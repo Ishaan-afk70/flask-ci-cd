@@ -13,8 +13,8 @@ pipeline {
             steps {
                 // Start Flask application in the background
                 bat 'start /b python app.py'
-                // Allow time for the application to start
-                bat 'timeout /t 5'
+                // Wait for the application to start using ping instead of timeout
+                bat 'ping -n 6 127.0.0.1 > nul'
             }
         }
 
@@ -27,9 +27,12 @@ pipeline {
 
         stage('Shutdown Application') {
             steps {
-                // Shut down the Flask application (find and kill the process)
-                bat 'for /f "tokens=5" %%a in (\'netstat -aon ^| find ":5000" ^| find "LISTENING"\') do taskkill /F /PID %%a'
-                // Note: In batch files within Jenkinsfile, use %%a instead of %a
+                // Find and kill the Flask process running on port 5000
+                bat '''
+                for /f "tokens=5" %%a in ('netstat -ano ^| find ":5000" ^| find "LISTENING"') do (
+                    taskkill /F /PID %%a
+                )
+                '''
             }
         }
     }
