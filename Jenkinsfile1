@@ -20,7 +20,7 @@ pipeline {
 
         stage('Run Selenium Tests') {
             steps {
-                sh 'python test.py'
+                sh 'python test_google.py'
             }
         }
     }
