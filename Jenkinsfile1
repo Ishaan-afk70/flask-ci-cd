@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                    credentialsId: 'github-pat',  // Use the GitHub token stored in Jenkins
+                    url: 'https://github.com/Ishaan-afk70/flask-ci-cd.git'
+            }
+        }
+
+        stage('Setup Python Environment') {
+            steps {
+                sh 'python -m venv venv'
+                sh 'source venv/bin/activate'
+                sh 'pip install -r requirements.txt'
+            }
+        }
+
+        stage('Run Selenium Tests') {
+            steps {
+                sh 'python test.py'
+            }
+        }
+    }
+}
